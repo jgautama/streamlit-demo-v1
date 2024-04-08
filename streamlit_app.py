@@ -13,7 +13,7 @@ import plotly.express as px
 A One-Stop Solution for predicting your admission chances to top universities depending or suggesting universities based on your profile.
 """
 
-dataset = pd.read_csv('data\TOEFL_IELTS_Combined.csv')
+dataset = pd.read_csv('data/TOEFL_IELTS_Combined.csv')
 tab1, tab2 = st.tabs([
     'Predict Admission', 'Suggest Universities'
 ])
