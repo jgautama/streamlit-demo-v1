@@ -33,7 +33,7 @@ with tab1:
         UNIVERSITY_NAME = st.selectbox(options=get_universities(), label="Select your University/Major to apply")
         UNIVERSITY_MAJOR = st.selectbox(options=get_uni_major(), label="Select your Major to apply")
         SEASON = st.selectbox(options=["Fall", "Spring"], label="Select the season to apply")
-        GPA = st.number_input("Enter GPA score* [0.0 - 4.0]:", value=3.0, min_value=1.0, max_value=4.0, step=0.1, placeholder="0.0 - 4.0")
+        GPA = st.number_input("Enter GPA score* [0.0 - 4.0]:", value=3.0, min_value=0.0, max_value=4.0, step=0.1, placeholder="0.0 - 4.0")
 
         col1, col2, col3, col4 = st.columns(4)
         with col1:
