@@ -1,5 +1,5 @@
 import streamlit as st
-from api.api_model import _get_all_universities_majors, _normalize_toefl_ielts_score, _predict_acceptance, _get_all_universities, _get_major_by_university, _get_applied_info
+#from api.api_model import _get_all_universities_majors, _normalize_toefl_ielts_score, _get_all_universities, _get_major_by_university, _get_applied_info
 from models.model_university import *
 import plotly.express as px
 

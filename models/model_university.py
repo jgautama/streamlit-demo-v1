@@ -53,44 +53,6 @@ def get_uni_major():
 def get_universities():
     return df_admitsFYI['University'].unique()
 
-def get_top_five_universities():
-    university_counts = df_admitsFYI['University'].value_counts()
-    top_universities = university_counts.head(5).index.tolist()
-    return top_universities
-
-def get_top_majors_by_university(university_name):
-    
-    top_universities = get_top_five_universities()
-    filtered_data = df_admitsFYI[df_admitsFYI['University'].isin(top_universities)]
-
-    # store everything again in a dictionary
-    top_majors_per_university = {}
-    for university in top_universities:
-        # Filter the dataset for the current university
-        uni_data = filtered_data[filtered_data['University'] == university]
-        # Count the instances of each major
-        major_counts = uni_data['Target Major'].value_counts().head(5)
-        # Store the results
-        top_majors_per_university[university] = major_counts
-        
-
-    majors = top_majors_per_university[university_name].keys()
-    # for major, _ in top_majors_per_university[university_name].items():
-    #     majors.append(major)
-    return majors
-
-
-def get_list_majors_per_universities():
-    universities = get_top_five_universities()
-    universities_majors_list = []
-    for university_name in universities:
-        majors = get_top_majors_by_university(university_name)
-        for major in majors:
-            model_key = f"{university_name} - {major}"
-            universities_majors_list.append(model_key)
-    
-    return universities_majors_list
-
 def get_applied_info(university_name, major_name):
     uni_major = df_admitsFYI[(df_admitsFYI['University'] == university_name) & (df_admitsFYI['Target Major'] == major_name)]
     
