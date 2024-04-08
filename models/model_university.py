@@ -11,14 +11,12 @@ FILENAME = "TOEFL_IELTS_Combined"
 FILEPATH = './data/' + FILENAME + '.csv'
 df_admitsFYI = pd.read_csv(FILEPATH)
 
-def download_model():
-    model_url = "https://drive.google.com/uc?id=12b4TZnn3O3vApMQvJTNXFLykBcETWziW"
-    #model_url = "https://drive.google.com/uc?id=1ktMLwFoAXnvsf-sfEXhGbjwkFQ5c2_aX"
-    # Check if model is downloaded stack_model.joblib
-    if not os.path.exists('models/stack_model.joblib'):
-        gdown.download(model_url, 'models/stack_model.joblib')
-    model = joblib.load('models/stack_model.joblib')
-    return model
+model_url = "https://drive.google.com/uc?id=12b4TZnn3O3vApMQvJTNXFLykBcETWziW"
+#model_url = "https://drive.google.com/uc?id=1ktMLwFoAXnvsf-sfEXhGbjwkFQ5c2_aX"
+# Check if model is downloaded stack_model.joblib
+if not os.path.exists('models/stack_model.joblib'):
+    gdown.download(model_url, 'models/stack_model.joblib')
+model = joblib.load('models/stack_model.joblib')
 
 # def get_prediction():
 #     # University	Target Major	GRE Verbal	GRE Quantitative	GRE Writing	GRE Total	GPA	Papers	Work Exp	Season	TOEFL/IELTS
@@ -46,7 +44,6 @@ def get_prediction(student_data):
         ]]
     
     print(data_point)
-    model = download_model()
     
     return model.predict(data_point)[0]
 
