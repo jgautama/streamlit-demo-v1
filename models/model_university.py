@@ -12,8 +12,8 @@ FILEPATH = './data/' + FILENAME + '.csv'
 df_admitsFYI = pd.read_csv(FILEPATH)
 
 def download_model():
-    #model_url = "https://drive.google.com/uc?id=12b4TZnn3O3vApMQvJTNXFLykBcETWziW"
-    model_url = "https://drive.google.com/uc?id=1ktMLwFoAXnvsf-sfEXhGbjwkFQ5c2_aX"
+    model_url = "https://drive.google.com/uc?id=12b4TZnn3O3vApMQvJTNXFLykBcETWziW"
+    #model_url = "https://drive.google.com/uc?id=1ktMLwFoAXnvsf-sfEXhGbjwkFQ5c2_aX"
     # Check if model is downloaded stack_model.joblib
     if not os.path.exists('models/stack_model.joblib'):
         gdown.download(model_url, 'models/stack_model.joblib')
