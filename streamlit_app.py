@@ -1,5 +1,6 @@
 import streamlit as st
 #from api.api_model import _get_all_universities_majors, _normalize_toefl_ielts_score, _get_all_universities, _get_major_by_university, _get_applied_info
+from api.api_model import normalize_toefl_ielts_score
 from models.model_university import *
 import plotly.express as px
 
@@ -29,8 +30,8 @@ with tab1:
     with st.form("user_input"):
         st.write(":red[\* Indicates required question]", )
         
-        UNIVERSITY_NAME = st.selectbox(options=_get_all_universities(), label="Select your University/Major to apply")
-        UNIVERSITY_MAJOR = st.selectbox(options=_get_major_by_university(), label="Select your Major to apply")
+        UNIVERSITY_NAME = st.selectbox(options=get_universities(), label="Select your University/Major to apply")
+        UNIVERSITY_MAJOR = st.selectbox(options=get_uni_major(), label="Select your Major to apply")
         SEASON = st.selectbox(options=["Fall", "Spring"], label="Select the season to apply")
         GPA = st.number_input("Enter GPA score* [0.0 - 4.0]:", value=3.0, min_value=1.0, max_value=4.0, step=0.1, placeholder="0.0 - 4.0")
 
@@ -51,7 +52,7 @@ with tab1:
         submit_university_name_input = st.form_submit_button(label="Predict Admission")
         
         if submit_university_name_input:
-            NORMALIZED_TOEFL_IELTS = _normalize_toefl_ielts_score(TOEFL_IELTS)
+            NORMALIZED_TOEFL_IELTS = normalize_toefl_ielts_score(TOEFL_IELTS)
             #st.write(NORMALIZED_TOEFL_IELTS)
             student_data = {
                 "University": UNIVERSITY_NAME,
@@ -75,7 +76,7 @@ with tab1:
             else:
                 st.warning(f"You are less likely to get admitted at {UNIVERSITY_NAME} for {UNIVERSITY_MAJOR}.")
             
-            results = _get_applied_info(UNIVERSITY_NAME, UNIVERSITY_MAJOR)
+            results = get_applied_info(UNIVERSITY_NAME, UNIVERSITY_MAJOR)
 
             attributes = ["GPA", "GRE Verbal", "GRE Quantitative", "GRE Writing", "GRE Total", "TOEFL/IELTS", "Papers", "Work Exp"]
 
@@ -98,7 +99,7 @@ with tab2:
     with st.form("user_input_suggestion"):
         st.write(":red[\* Indicates required question]", )
         
-        UNIVERSITY_MAJOR = st.selectbox(options=_get_major_by_university(), label="Select your Major to apply")
+        UNIVERSITY_MAJOR = st.selectbox(options=get_uni_major(), label="Select your Major to apply")
         SEASON = st.selectbox(options=["Fall", "Spring"], label="Select the season to apply")
         GPA = st.number_input("Enter GPA score* [0.0 - 4.0]:", value=3.0, min_value=1.0, max_value=4.0, step=0.1, placeholder="0.0 - 4.0")
 
@@ -119,7 +120,7 @@ with tab2:
         submit_university_name_input = st.form_submit_button(label="Suggest Universities")
         
         if submit_university_name_input:
-            NORMALIZED_TOEFL_IELTS = _normalize_toefl_ielts_score(TOEFL_IELTS)
+            NORMALIZED_TOEFL_IELTS = normalize_toefl_ielts_score(TOEFL_IELTS)
             #st.write(NORMALIZED_TOEFL_IELTS)
             student_data = {
                 "University": UNIVERSITY_NAME,
