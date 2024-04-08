@@ -5,20 +5,19 @@ from data import University_Majors_Dict as umd
 import gdown
 import os
 
+FILENAME = "TOEFL_IELTS_Combined"
+# streamlit file path runs it from root directory.
+# "../data" will cause error.
+FILEPATH = './data/' + FILENAME + '.csv'
+
+df_admitsFYI = pd.read_csv(FILEPATH)
+
 def download_model():
-    FILENAME = "TOEFL_IELTS_Combined"
-    # streamlit file path runs it from root directory.
-    # "../data" will cause error.
-    FILEPATH = './data/' + FILENAME + '.csv'
 
-    df_admitsFYI = pd.read_csv(FILEPATH)
     model_url = "https://drive.google.com/uc?id=12b4TZnn3O3vApMQvJTNXFLykBcETWziW"
-
     # Check if model is downloaded stack_model.joblib
-
     if not os.path.exists('models/stack_model.joblib'):
         gdown.download(model_url, 'models/stack_model.joblib')
-
     model = joblib.load('models/stack_model.joblib')
     return model
 
@@ -49,7 +48,7 @@ def get_prediction(student_data):
     
     print(data_point)
     model = download_model()
-    
+
     return model.predict(data_point)[0]
 
 def get_uni_major(): 
