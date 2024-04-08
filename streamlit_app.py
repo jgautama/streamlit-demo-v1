@@ -97,7 +97,7 @@ with tab2:
     with st.form("user_input_suggestion"):
         st.write(":red[\* Indicates required question]", )
         
-        UNIVERSITY_MAJOR = st.selectbox(options=_get_major_by_university(), label="Select your Major to apply")
+        UNIVERSITY_MAJOR = st.selectbox(options=get_uni_major(), label="Select your Major to apply")
         SEASON = st.selectbox(options=["Fall", "Spring"], label="Select the season to apply")
         GPA = st.number_input("Enter GPA score* [0.0 - 4.0]:", value=3.0, min_value=1.0, max_value=4.0, step=0.1, placeholder="0.0 - 4.0")
 
