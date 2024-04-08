@@ -143,6 +143,3 @@ with tab2:
             else:
                 st.warning(f"You are less likely to get admitted at {UNIVERSITY_NAME} for {UNIVERSITY_MAJOR}.")
                 
-            # st.write(student_data)
-            # st.write(UNIVERSITY_NAME)
-            #st.write(_predict_acceptance(student_data, UNIVERSITY_NAME_MAJOR))   

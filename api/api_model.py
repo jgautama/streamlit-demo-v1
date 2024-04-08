@@ -40,9 +40,6 @@ def _normalize_toefl_ielts_score(score: int) -> int:
         
     return normalized_score
 
-def _predict_acceptance(map, university_major):
-    return 1 #get_acceptance_score(map, university_major)
-
 """
 purpose: retrieve all universities name from the dataset
 return: list of universities name (string)
