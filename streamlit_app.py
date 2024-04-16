@@ -71,7 +71,7 @@ with tab1:
             if admit_status == 1:
                 st.info(f"You are likely to get admitted at {UNIVERSITY_NAME} for {UNIVERSITY_MAJOR}.")
             else:
-                st.warning(f"You are less likely to get admitted at {UNIVERSITY_NAME} for {UNIVERSITY_MAJOR}.")
+                st.warning(f"You are unlikely to get admitted at {UNIVERSITY_NAME} for {UNIVERSITY_MAJOR}.")
             
             results = get_applied_info(UNIVERSITY_NAME, UNIVERSITY_MAJOR)
             admit_results = get_admit_info(UNIVERSITY_NAME, UNIVERSITY_MAJOR)
