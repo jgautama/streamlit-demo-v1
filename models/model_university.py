@@ -2,6 +2,8 @@ import pandas as pd
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import LabelEncoder
 import joblib
+import numpy as np
+import plotly.graph_objects as go
 from data import University_Majors_Dict as umd
 import gdown
 import os
@@ -63,26 +65,54 @@ def get_prediction(student_data):
     return model.predict(data_point)[0]
 
 def get_uni_major(): 
-    return df_admitsFYI['Target Major'].unique()
+    # return df_admitsFYI['Target Major'].unique()
+    return umd.target_major_dict.keys()   
 
 def get_universities():
-    return df_admitsFYI['University'].unique()
+    # return df_admitsFYI['University'].unique()
+    return umd.university_dict.keys()
+
+
+def get_top_five_universities():
+    university_counts = df_admitsFYI['University'].value_counts()
+    top_universities = university_counts.head(5).index.tolist()
+    return top_universities
+
+def get_top_majors_by_university(university_name):
+    
+    top_universities = get_top_five_universities()
+    filtered_data = df_admitsFYI[df_admitsFYI['University'].isin(top_universities)]
+
+    # store everything again in a dictionary
+    top_majors_per_university = {}
+    for university in top_universities:
+        # Filter the dataset for the current university
+        uni_data = filtered_data[filtered_data['University'] == university]
+        # Count the instances of each major
+        major_counts = uni_data['Target Major'].value_counts().head(5)
+        # Store the results
+        top_majors_per_university[university] = major_counts
+        
+
+    majors = top_majors_per_university[university_name].keys()
+    # for major, _ in top_majors_per_university[university_name].items():
+    #     majors.append(major)
+    return majors
+
+
+def get_list_majors_per_universities():
+    universities = get_top_five_universities()
+    universities_majors_list = []
+    for university_name in universities:
+        majors = get_top_majors_by_university(university_name)
+        for major in majors:
+            model_key = f"{university_name} - {major}"
+            universities_majors_list.append(model_key)
+    
+    return universities_majors_list
 
 def get_applied_info(university_name, major_name):
     uni_major = df_admitsFYI[(df_admitsFYI['University'] == university_name) & (df_admitsFYI['Target Major'] == major_name)]
-    
-    # result = {
-    #     "Application Count": uni_major.shape[0],
-    #     "Number of Admits": uni_major[uni_major['Status'] == 1].shape[0],
-    #     "Average GPA": uni_major['GPA'].mean(),
-    #     "Average GRE Verbal": uni_major['GRE Verbal'].mean(),
-    #     "Average GRE Quantitative": uni_major['GRE Quantitative'].mean(),
-    #     "Average GRE Writing": uni_major['GRE Writing'].mean(),
-    #     "Average GRE Total": uni_major['GRE Total'].mean(),
-    #     "Average TOEFL/IELTS": uni_major['TOEFL/IELTS'].mean(),
-    #     "Average Papers": uni_major['Papers'].mean(),
-    #     "Average Work Exp": uni_major['Work Exp'].mean()
-    # }
     
     result = {
         "GPA": uni_major['GPA'],
@@ -97,6 +127,24 @@ def get_applied_info(university_name, major_name):
     }
     
     return result
+
+def get_admit_info(university_name, major_name):
+    uni_major = df_admitsFYI[(df_admitsFYI['University'] == university_name) & (df_admitsFYI['Target Major'] == major_name) & (df_admitsFYI['Status'] == 1)]
+    
+
+    result = {
+        "GPA": uni_major['GPA'].mean(),
+        "GRE Verbal": uni_major['GRE Verbal'].mean(),
+        "GRE Quantitative": uni_major['GRE Quantitative'].mean(),
+        "GRE Writing": uni_major['GRE Writing'].mean(),
+        "GRE Total": uni_major['GRE Total'].mean(),
+        "TOEFL/IELTS": uni_major['TOEFL/IELTS'].mean(),
+        "Papers": uni_major['Papers'].mean(),
+        "Work Exp": uni_major['Work Exp'].mean()
+        # "Season": uni_major['Season'].mean()
+    }    
+    return result
+
 
 def get_school_recommendations(student_data):
 
@@ -180,3 +228,43 @@ def get_school_recommendations(student_data):
 
     # print(total_unis)
     return(total_unis)
+
+def get_school_recommendations_figure():
+
+    feat_imp_df = df_admitsFYI.copy()
+    feat_imp_df = feat_imp_df.drop(columns=['UG College', 'UG Major','Year'])
+    feat_imp_df['Season'] = feat_imp_df['Season'].map({'Fall': 0, 'Spring': 1})
+    major_encoder = LabelEncoder()
+    major_encoder.fit(feat_imp_df['Target Major'])
+    feat_imp_df['Target Major'] = major_encoder.transform(feat_imp_df['Target Major'])
+    X = feat_imp_df.iloc[:, 2:]
+    major_feat_imp = pd.DataFrame(suggest_uni_model.feature_importances_, index=X.columns, columns=['Importance']).sort_values(by='Importance', ascending=False)
+
+    # Assuming you have the same data as before
+    std_devs = np.std([tree.feature_importances_ for tree in suggest_uni_model.estimators_], axis=0)
+    feature_importances = {'Feature': major_feat_imp.index, 'Importance': major_feat_imp['Importance']}
+
+    # Creating the Plotly bar plot
+    fig = go.Figure()
+    fig.add_trace(go.Bar(
+        x=feature_importances['Feature'],
+        y=feature_importances['Importance'],
+        error_y=dict(
+            type='data',
+            array=std_devs,
+            visible=True
+        ),
+        marker_color='#1f77b4',
+        name='Feature Importances'
+    ))
+
+    # Customizing the layout
+    fig.update_layout(
+        title='Features and their importance',
+        xaxis_title='Features',
+        yaxis_title='Importance',
+        bargap=0.1
+    )
+
+    # Displaying the plot
+    return fig
