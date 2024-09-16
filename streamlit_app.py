@@ -3,7 +3,7 @@ from models.model_university import *
 import plotly.express as px
 import plotly.graph_objects as go
 
-# https://app-demo-jqzfc4d4nb2dm4mkhxqzgr.streamlit.app/
+# https://unifinder.streamlit.app/
 
 # https://docs.streamlit.io/library/api-reference
 
